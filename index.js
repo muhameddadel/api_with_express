@@ -1,10 +1,12 @@
+require('dotenv').config()
 const express = require("express");
 const courseRouter = require('./routes/courses.route')
-
+const httpStatus = require("./utils/httpStatus")
+const cors = require("cors")
 
 const mongoose = require('mongoose')
 
-const url = "mongodb+srv://medo:0506450922Nodejs@nodeapi.asov9dz.mongodb.net/Nodejs?retryWrites=true&w=majority"
+const url = process.env.MONGODB_URL
 
 mongoose.connect(url).then(() => {
     console.log("Connected successfully to database")
@@ -13,15 +15,20 @@ mongoose.connect(url).then(() => {
 
 const app = express()
 
+
+app.use(cors())
 app.use(express.json())
 
 
 app.use('/api/courses', courseRouter)
 
+app.all("*", (req, res) => {
+    res.status(404).json({status: httpStatus.ERROR, message: "This resource is not available"})
+})
 
 
 
-app.listen(5000, () => {
-    console.log("listening on port 5000")
+app.listen(process.env.PORT, () => {
+    console.log(`listening on port ${process.env.PORT}`)
 })
 
