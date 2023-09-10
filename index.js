@@ -26,7 +26,9 @@ app.all("*", (req, res) => {
     res.status(404).json({status: httpStatus.ERROR, message: "This resource is not available"})
 })
 
-
+app.use((err, req, res, next) => {
+    res.status(err.code || 500).json({status: err.text || httpStatus.ERROR, message: err.message, code: err.code || 500, data: null})
+})
 
 app.listen(process.env.PORT, () => {
     console.log(`listening on port ${process.env.PORT}`)
