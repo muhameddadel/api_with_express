@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require("express");
 const courseRouter = require('./routes/courses.route')
+const usersRouter = require('./routes/users.route')
 const httpStatus = require("./utils/httpStatus")
 const cors = require("cors")
 
@@ -21,6 +22,7 @@ app.use(express.json())
 
 
 app.use('/api/courses', courseRouter)
+app.use('/api/users', usersRouter)
 
 app.all("*", (req, res) => {
     res.status(404).json({status: httpStatus.ERROR, message: "This resource is not available"})
