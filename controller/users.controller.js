@@ -21,7 +21,7 @@ const getAllUsers = asyncWarpper(async (req, res) => {
 
 
 const register = asyncWarpper(async (req, res, next) => {
-    const {username, email, password} = req.body
+    const {username, email, password, role} = req.body
 
     const existedUser = await User.findOne({email: email})
     if (existedUser) {
@@ -35,9 +35,10 @@ const register = asyncWarpper(async (req, res, next) => {
         username,
         email,
         password: hashedPassword,
+        role
     })
 
-    const token = await generateJWT({email: newUser.email, id: newUser._id})
+    const token = await generateJWT({email: newUser.email, id: newUser._id, role: newUser.role})
     newUser.token = token
 
 
@@ -64,7 +65,7 @@ const login = asyncWarpper(async (req, res, next) => {
     const matchedPassword = await bcrypt.compare(password, user.password)
 
     if (user && matchedPassword) {
-        const token = await generateJWT({email: user.email, id: user._id})
+        const token = await generateJWT({email: user.email, id: user._id, role: user.role})
         return res.status(200).json({status: httpStatus.SUCCESS, data: {token}})
     } else {
         const error = appError.create("Wrong password or email", 500, httpStatus.ERROR)
