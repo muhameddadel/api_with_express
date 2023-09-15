@@ -35,7 +35,8 @@ const register = asyncWarpper(async (req, res, next) => {
         username,
         email,
         password: hashedPassword,
-        role
+        role, 
+        avatar: req.file.filename
     })
 
     const token = await generateJWT({email: newUser.email, id: newUser._id, role: newUser.role})

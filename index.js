@@ -4,6 +4,7 @@ const courseRouter = require('./routes/courses.route')
 const usersRouter = require('./routes/users.route')
 const httpStatus = require("./utils/httpStatus")
 const cors = require("cors")
+const path = require("path")
 
 const mongoose = require('mongoose')
 
@@ -16,6 +17,8 @@ mongoose.connect(url).then(() => {
 
 const app = express()
 
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.use(cors())
 app.use(express.json())
